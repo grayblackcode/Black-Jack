@@ -50,3 +50,38 @@ def set_score(self):
 
     return self.score
 
+def hit(self, card):
+    self.hand.append(card)
+    self.score = self.set_score()
+
+def play(self, new_hand):
+    self.hand = new_hand
+    self.score = self.set_score()
+
+def bet_money(self, amount):
+    self.money -= amount
+    self.bet += amount
+
+def win(self, result):
+    if result:
+        if self.score == 21 and len(self.hand) === 2:
+            self.money += 2.5 * self.bet
+        else:
+            self.money += 2 * self.bet
+
+        self.bet = 0
+    else:
+        self.bet = 0
+
+def draw(self):
+    self.money += self.bet
+    self.bet = 0
+
+def has_blackjack(self):
+    if self.score == 21 and len(self.hand) == 2:
+        return True
+    else:
+        return False
+
+
+        
