@@ -50,38 +50,107 @@ def set_score(self):
 
     return self.score
 
-def hit(self, card):
-    self.hand.append(card)
-    self.score = self.set_score()
+    def hit(self, card):
+        self.hand.append(card)
+        self.score = self.set_score()
 
-def play(self, new_hand):
-    self.hand = new_hand
-    self.score = self.set_score()
+    def play(self, new_hand):
+        self.hand = new_hand
+        self.score = self.set_score()
 
-def bet_money(self, amount):
-    self.money -= amount
-    self.bet += amount
+    def bet_money(self, amount):
+        self.money -= amount
+        self.bet += amount
 
-def win(self, result):
-    if result:
-        if self.score == 21 and len(self.hand) === 2:
-            self.money += 2.5 * self.bet
+    def win(self, result):
+        if result:
+            if self.score == 21 and len(self.hand) === 2:
+                self.money += 2.5 * self.bet
+            else:
+                self.money += 2 * self.bet
+
+            self.bet = 0
         else:
-            self.money += 2 * self.bet
+            self.bet = 0
 
+    def draw(self):
+        self.money += self.bet
         self.bet = 0
+
+    def has_blackjack(self):
+        if self.score == 21 and len(self.hand) == 2:
+            return True
+        else:
+            return False
+
+
+def print_house(house):
+    for card in range(len(house.hand)):  # e.g if len(House.hand) = 5
+        # range will be 0,1,2,3,4
+        if card == 0:  # first card
+            print("X", end = " ")  # end=" " keeps printing on the same line
+        elif card == len(house.hand[card]) - 1:  #last card
+            print(house.hand[card]) # prints last card
+        else:
+            print(house.hand[card])
+       
+
+card_deck = create_deck()
+
+first_hand = [card_deck.pop(), card_deck.pop()]
+second_hand = [card_deck.pop(), card_deck.pop()]
+player1 = Player(first_hand)
+house = PLayer(second_hand)
+
+while True:
+    if len(card_deck) < 20:
+        card_deck = create_deck()  #brand new card deck
+    
+    first_hand = [card_deck.pop(), card_deck.pop()]
+    second_hand = [card_deck.pop(), card_deck.pop()]
+    player1.play(first_hand)
+    house.play(second_hand)
+
+    bet = int(input("Please enter your bet: "))
+    player1.bet_money(bet)
+    print_house(house)
+    print(player1)
+
+    if player1.has_blackjack():
+        if house.has_blackjack():
+            player1.draw()
+        else:
+            player1.win(True)
+
     else:
-        self.bet = 0
+        while player1.score < 21:
+            action = input("Do you want another card? (y/n): ")
+            if action == "y":
+                player1.hit(card_deck.pop())
+                print(player1)
+                print_house(house)
+            else:
+                break
+        while house.score > 21:
+            print(house)
+            house.hit(card_deck.pop())
 
-def draw(self):
-    self.money += self.bet
-    self.bet = 0
+        if player1.score > 21:
+            if house.score > 21:
+                player.draw()
+            else:
+                player1.win(False)
 
-def has_blackjack(self):
-    if self.score == 21 and len(self.hand) == 2:
-        return True
-    else:
-        return False
+        elif player1.score > house.score:
+            player1.win(True)
+        elif player1.score == house.score:
+            player1.draw()
+        else:
+            if house.score > 21:
+                player1.win(True)
+            else:
+                player1.win(False)
 
-
-        
+    
+    print(player1.money)
+    print(house)
