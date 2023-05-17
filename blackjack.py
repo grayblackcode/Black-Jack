@@ -137,7 +137,7 @@ while True:
 
         if player1.score > 21:
             if house.score > 21:
-                player.draw()
+                player1.draw()
             else:
                 player1.win(False)
 
@@ -154,3 +154,6 @@ while True:
     
     print(player1.money)
     print(house)
+
+# you can add a list of players in an array
+# use a for in loop to go through it
